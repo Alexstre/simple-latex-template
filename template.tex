@@ -1,0 +1,174 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Author: Alex M. <alex@codefu.ca>
+% https://github.com/Alexstre/simple-latex-template/
+%
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%
+% Mock data found in the examples folder generated with https://www.mockaroo.com
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{hyperref} % To include links with \url
+
+% Encoding / corrections
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern} % Use the modern fonts
+\usepackage[T1]{fontenc}
+
+% Use for placeholder content
+\usepackage{blindtext} % Can be commented or removed
+
+% Uncomment for French
+%\usepackage[french]{babel}
+\usepackage[english]{babel}
+
+% Graphs and plots
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{graphicx}
+\usepackage{float}
+
+% Creates tables from CSV files
+\usepackage{booktabs}
+\usepackage{pgfplotstable}
+
+% Removes indent on paragraphs
+\setlength\parindent{0pt}
+
+% Settings for plots
+\pgfplotsset{compat=newest}
+\usepgfplotslibrary{units}
+
+% Geometry settings (reduces margins)
+\usepackage[a4paper,bindingoffset=0.2in,left=1in,right=1in,top=1in,bottom=1in,footskip=.25in]{geometry}
+
+% Sets the path to the CSV files, use \datadir anywhere
+\newcommand*{\datadir}{example}
+
+%----------------------------------------------------------------------------------------
+%	TABLE DEFINITIONS
+%----------------------------------------------------------------------------------------
+\pgfplotstableread[col sep=comma]{\datadir/cities.csv}\citiestable
+
+%----------------------------------------------------------------------------------------
+%	INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{Tile should \\ Come here} % Title
+
+\author{John \textsc{Smith}}
+
+\begin{document}
+
+\clearpage\maketitle
+\thispagestyle{empty}
+
+\begin{center}
+\begin{tabular}{l r}
+Date: & June 10th 2015 \\ 
+\end{tabular}
+\end{center}
+
+\newpage
+
+%----------------------------------------------------------------------------------------
+%	Table of Contents
+%----------------------------------------------------------------------------------------
+\tableofcontents
+\newpage
+
+
+%----------------------------------------------------------------------------------------
+%	A section without much content
+%----------------------------------------------------------------------------------------
+
+\section{Section 1}
+\blindtext[3]
+
+%----------------------------------------------------------------------------------------
+
+%----------------------------------------------------------------------------------------
+%	A section with subsection and a plot (data from csv files)
+%----------------------------------------------------------------------------------------
+
+\section{Another section}
+\blindtext[2]
+
+\subsection{Lorem ipsum dolor sit amet}
+% Plot
+\begin{figure}[H]
+  \begin{center}
+    \begin{tikzpicture}
+      \begin{axis}[
+          width=\linewidth,
+          grid=major,
+          grid style={dashed,gray!30},
+          % Uncomment for log scale
+          %xmode=log, log basis x=10,
+          %ymode=log, log basis y=10,
+          xlabel=id, % Label for X axis
+          ylabel=value, % Label for Y axis
+          legend style={at={(0.5,-0.2)},anchor=north}, % Legend Style
+          x tick label style={rotate=90,anchor=east}
+        ]
+        % Plots. Each Multiple \addplot show on the same plot
+        \addplot table[x=id,y=value,col sep=comma] {\datadir/plotdata.csv}; 
+        \addplot table[x=id,y=value,col sep=comma] {\datadir/plotdata2.csv}; 
+        \addplot table[x=id,y=value,col sep=comma] {\datadir/plotdata3.csv};
+        \legend{Legend goes here, Second, Third} % Comma-separated for each plot
+      \end{axis}
+    \end{tikzpicture}
+    \caption{Caption goes here}
+  \end{center}
+\end{figure}
+
+\newpage
+
+% Another subsection
+\subsection{Duis dapibus lacinia lacinia}
+
+%----------------------------------------------------------------------------------------
+%	A table: See the definition in the TABLE DEFINITIONS section above
+%----------------------------------------------------------------------------------------
+\begin{center}
+\pgfplotstabletypeset[
+string type,
+every head row/.style={before row={\toprule},after row=\midrule},
+every last row/.style={after row={\toprule}},
+]\citiestable
+\end{center}
+%----------------------------------------------------------------------------------------
+
+%----------------------------------------------------------------------------------------
+%	Another section example with sub and subsub sections.
+%----------------------------------------------------------------------------------------
+
+\section{Ante ipsum primis}
+\blindtext[1]
+\subsection{Ipsum dolor sit}
+\blindtext[1]
+\subsubsection{Lorem ipsum dolor sit amet}
+\blindtext[1]
+\blindenumerate[5]
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
